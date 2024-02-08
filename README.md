@@ -3,28 +3,26 @@
 
 ## Description
 
-Assigned work
+Bootcamp assignment Nine
 
-To learn about node.js
+A program through node that will generate a readme file based off of user input
 
-Teaches me about stuff i didnt know
+Made with the ententions of learning a new programming language
 
-How to Create a README file
+Used as a stepping stone to learn node.js
 
 ## Installation
 
 none
 ## Usage
 
-enter node index.js into the terminal to initialize
+Enter "node index.js" into the integrated terminal to initialize
 ## Credits
 
 none
 ## License
 
 MIT License
-
-## Badges
 
 ## Features
 
@@ -37,7 +35,7 @@ none
 none
 ## Questions
 
-placeholder Name
+AdamMcMains
 
-PlaceHolder Email
+adammcmains@gmail.com
 
