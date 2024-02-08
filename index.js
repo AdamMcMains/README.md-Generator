@@ -2,9 +2,10 @@ const package1 = require('./package.json');
 const package2 = require('./package-lock.json');
 const fs = require('fs');
 var inquirer = require('inquirer');
+const generateMarkdown = require('./utils/generateMarkdown');
 
 var newLine = "\n";
-var readmeSections = ["Title","Description","Installation", "Usage", "Credits", "License", "Badges", "Features", "How To Contribute", "Tests", "Questions"];
+var readmeSections = ["Description","Installation", "Usage", "Credits", "License", "Badges", "Features", "How To Contribute", "Tests", "Questions"];
 
 const questions = [
     {
@@ -78,7 +79,7 @@ const questions = [
         type: 'list',
         name: "License",
         message: "choose a software license that fits your project",
-        choices: ["GNU AGPLv3", "GNU GPLv3", "GNU LGPLv3", "Apache license 2.0", "MIT license", "Boost Software License 1.0", "The Unlicense"],
+        choices: ["GNU AGPL v3", "GNU GPL v3", "GNU LGPL v3", "Apache License 2.0", "MIT License", "Boost Software License 1.0", "The Unlicense"],
     },
 ];
 
@@ -108,7 +109,7 @@ async function getAnswers(){
 
                 tests: `${answers.Tests}`,
 
-                gitHub: `${answers.Github}`,
+                github: `${answers.Github}`,
 
                 email: `${answers.Contact}`,
 
@@ -121,16 +122,19 @@ async function getAnswers(){
     }); 
 };
 
+function appendTitle(file, information){
+    fs.appendFileSync(file, "# " + information.projectTitle + newLine + newLine, (err) => {
+        if (err) throw err;
+    });
+}
 
 function appendSections(file, information, sections){
-    if (sections == "Title"){
-        writeToFile(file,"# " + information.projectTitle);
-    }
-    else if(sections == "Description"){
-        addToFile(file, information.motivation)
-        addToFile(file, information.inspiration)
-        addToFile(file, information.purpose)
-        addToFile(file, information.reflection)
+    
+    if(sections == "Description"){
+        addToFile(file, information.motivation + newLine)
+        addToFile(file, information.inspiration + newLine)
+        addToFile(file, information.purpose + newLine)
+        addToFile(file, information.reflection + newLine)
     }
     else if(sections =="Installation"){
         addToFile(file, information.installation)
@@ -143,6 +147,8 @@ function appendSections(file, information, sections){
     }
     else if(sections =="License"){
         addToFile(file, information.license)
+        let licenseLink = generateMarkdown(file, information.license);
+        addToFile(file, licenseLink.link);
     }
     else if(sections =="Features"){
         addToFile(file, information.features)
@@ -154,33 +160,37 @@ function appendSections(file, information, sections){
         addToFile(file, information.tests)
     }
     else if(sections =="Questions"){
-        addToFile(file, information.github)
-        addToFile(file, information.email)
+        addToFile(file, information.github + newLine)
+        addToFile(file, information.email + newLine)
     }
     else{
         return;
     }
 }
-// TODO: Create a function to write README file
+
 function writeToFile(fileName, data) {
     dataText = data;
-    fs.writeFileSync(fileName, dataText + newLine + newLine, (err) => {
+    fs.writeFileSync(fileName, dataText + newLine, (err) => {
         if (err) throw err;
     });
 }
 
 function addToFile(fileName, data){
     dataText = data;
-    fs.appendFileSync(fileName, dataText +  newLine, (err) => {
+    fs.appendFileSync(fileName, dataText + newLine, (err) => {
         if (err) throw err;
     });
 
     return;
 }
 
-// TODO: Create a function to initialize app
+
 async function init(file){
     let information = await getAnswers();
+    let licenseInfo = generateMarkdown(information.license)
+    writeToFile(file, licenseInfo.badge)
+    appendTitle(file, information);
+    
 
     for (const sections of readmeSections){ 
 
@@ -188,10 +198,10 @@ async function init(file){
         
         appendSections(file, information, sections);
 
-}
+    }
 }
 
-// Function call to initialize app
+
 init("README.md")
 
 
