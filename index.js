@@ -184,7 +184,6 @@ function addToFile(fileName, data){
     return;
 }
 
-
 async function init(file){
     let information = await getAnswers();
     let licenseInfo = generateMarkdown(information.license)
