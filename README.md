@@ -3,7 +3,7 @@
 
 ## Description
 
-Bootcamp assignment Nine
+README.md file generator
 
 A program through node that will generate a readme file based off of user input
 
